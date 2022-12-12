@@ -120,28 +120,29 @@ python inference_video.py --labelmap_path label_map.pbtxt --model_path experimen
 
 ## Dataset
 ### Dataset analysis
+| | |
 | ![](images/EDA/image0.png)  |  ![](images/EDA/image1.png) |
 | ![](images/EDA/image2.png)  |  ![](images/EDA/image3.png) |
 
 For the exploratory data analysis, I have shuffled and taken 10000 random images. The images are taken in varied conditions, weather and places. The class distribution is below: 
 
-    <img src="images/EDA/class_dist.png" width=100% height=100%>
+   <img src="images/EDA/class_dist.png" width=100% height=100%>
 
 As we can see, the dataset is quite imbalanced with very low count of cyclists. If we look further into the object distributions within images, we find the distribution for cyclists is very skewed where less than 900 images contain at least one cyclist. The distributions show that the dataset mostly contains vehicles and pedestrians in the images. Over 60k images contain at least 5 vehicles where maximum number of vehicles is 60+
 
-    <img src="https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/images/EDA/vehicles_dist.png" width=100% height=100%>
-    <img src="https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/images/EDA/pedestrian_dist.png" width=100% height=100%>
-    <img src="https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/images/EDA/cyclist_dist.png" width=100% height=100%>
+   <img src="images/EDA/vehicles_dist.png" width=100% height=100%>
+   <img src="images/EDA/pedestrian_dist.png" width=100% height=100%>
+   <img src="images/EDA/cyclist_dist.png" width=100% height=100%>
 
 
 ## Training
 ### Reference experiment
 
-    <img src="images/Experiments/reference_loss.png" width=80% height=80%>
+   <img src="images/Experiments/reference_loss.png" width=80% height=80%>
     
 The reference model, defined in [pipeline_new.config](https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/experiments/reference/pipeline_new.config) file, is trained for 2500 steps with a SGD with momentum optimizer. As we can see in the image above, the loss graphs are fluctuating a lot. The reason could be the small batch size of 2. The final evaluated total loss is 4.22 hence the model still needs modifications to improve the performance. The training loss and evaluation loss is quite close, therefore we can say there's no overfitting or underfitting present; the splitted dataset is the optimal splitting point for further experiments. 
 
 ### Experiment 1 
 #### With augmentations 
-    ![](images/Experiments/exp_1_loss.png)
+   <img src="images/Experiments/reference_loss.png" width=80% height=80%>
 
