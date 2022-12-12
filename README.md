@@ -1,10 +1,10 @@
 # Object Detection in an Urban Environment
 
-## Data
+## Project overview
 
-For this project, we will be using data from the [Waymo Open dataset](https://waymo.com/open/).
+In this project, with the help of TensorFlow Object Detection API we have trained a SSD ResNet 50 model to detect and classify objects using data from Waymo. The image dataset consists of urban environments containing annotated cyclists, pedestrians and vehicles.
 
-[OPTIONAL] - The files can be downloaded directly from the website as tar files or from the [Google Cloud Bucket](https://console.cloud.google.com/storage/browser/waymo_open_dataset_v_1_2_0_individual_files/) as individual tf records. We have already provided the data required to finish this project in the workspace, so you don't need to download it separately.
+First, an extensive data analysis is performed including the computation of label distributions, display of sample images, and checking for object occlusions. Then a reference model is trained as a baseline to compare and further improve the model. The data analysis is used to decide what augmentations are meaningful for improving the performance and then applied to the neural network. TensorBoard is used to monitor the training and evaluation process. Finally, a script is provided to create a short video of the model predictions.
 
 ## Structure
 
@@ -12,33 +12,36 @@ For this project, we will be using data from the [Waymo Open dataset](https://wa
 
 The data you will use for training, validation and testing is organized as follow:
 ```
-/home/workspace/data/waymo
-    - training_and_validation - contains 97 files to train and validate your models
-    - train: contain the train data (empty to start)
-    - val: contain the val data (empty to start)
+/data/
+    - train: contain the train data (87 files)
+    - val: contain the val data (10 files)
     - test - contains 3 files to test your model and create inference videos
 ```
 
-The `training_and_validation` folder contains file that have been downsampled: we have selected one every 10 frames from 10 fps videos. The `testing` folder contains frames from the 10 fps video without downsampling.
+The folders contains file that have been downsampled: we have selected one every 10 frames from 10 fps videos. The `testing` folder contains frames from the 10 fps video without downsampling.
 
-You will split this `training_and_validation` data into `train`, and `val` sets by completing and executing the `create_splits.py` file.
+If you donwload data from Waymo, you can use `create_splits.py` file to create the splits. As I have used the Udacity workspace, I have used the already splitted data. 
 
 ### Experiments
-The experiments folder will be organized as follow:
+The experiments folder is organized as follows:
 ```
 experiments/
-    - pretrained_model/
     - exporter_main_v2.py - to create an inference model
     - model_main_tf2.py - to launch training
     - reference/ - reference training with the unchanged config file
-    - experiment0/ - create a new folder for each experiment you run
-    - experiment1/ - create a new folder for each experiment you run
-    - experiment2/ - create a new folder for each experiment you run
+    - exp_1/ - added data augmentation techniques
+    - exp_2/ - tuned optimization parameters 
     - label_map.pbtxt
-    ...
 ```
 
-## Prerequisites
+## Set up and instructions
+
+### Data
+
+For this project, we will be using data from the [Waymo Open dataset](https://waymo.com/open/).
+
+[OPTIONAL] - The files can be downloaded directly from the website as tar files or from the [Google Cloud Bucket](https://console.cloud.google.com/storage/browser/waymo_open_dataset_v_1_2_0_individual_files/) as individual tf records. We have already provided the data required to finish this project in the repository, so you don't need to download it separately.
+
 
 ### Local Setup
 
@@ -48,8 +51,6 @@ Follow [the README therein](./build/README.md) to create a docker container and 
 
 ### Download and process the data
 
-**Note:** ”If you are using the classroom workspace, we have already completed the steps in the section for you. You can find the downloaded and processed files within the `/home/workspace/data/preprocessed_data/` directory. Check this out then proceed to the **Exploratory Data Analysis** part.
-
 The first goal of this project is to download the data from the Waymo's Google Cloud bucket to your local machine. For this project, we only need a subset of the data provided (for example, we do not need to use the Lidar data). Therefore, we are going to download and trim immediately each file. In `download_process.py`, you can view the `create_tf_example` function, which will perform this processing. This function takes the components of a Waymo Tf record and saves them in the Tf Object Detection api format. An example of such function is described [here](https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/training.html#create-tensorflow-records). We are already providing the `label_map.pbtxt` file.
 
 You can run the script using the following command:
@@ -58,18 +59,6 @@ python download_process.py --data_dir {processed_file_location} --size {number o
 ```
 
 You are downloading 100 files (unless you changed the `size` parameter) so be patient! Once the script is done, you can look inside your `data_dir` folder to see if the files have been downloaded and processed correctly.
-
-### Classroom Workspace
-
-In the classroom workspace, every library and package should already be installed in your environment. You will NOT need to make use of `gcloud` to download the images.
-
-## Instructions
-
-### Exploratory Data Analysis
-
-You should use the data already present in `/home/workspace/data/waymo` directory to explore the dataset! This is the most important task of any machine learning project. To do so, open the `Exploratory Data Analysis` notebook. In this notebook, your first task will be to implement a `display_instances` function to display images and annotations using `matplotlib`. This should be very similar to the function you created during the course. Once you are done, feel free to spend more time exploring the data and report your findings. Report anything relevant about the dataset in the writeup.
-
-Keep in mind that you should refer to this analysis to create the different spits (training, testing and validation).
 
 
 ### Create the training - validation splits
@@ -112,16 +101,6 @@ python experiments/model_main_tf2.py --model_dir=experiments/reference/ --pipeli
 
 To monitor the training, you can launch a tensorboard instance by running `python -m tensorboard.main --logdir experiments/reference/`. You will report your findings in the writeup.
 
-### Improve the performances
-
-Most likely, this initial experiment did not yield optimal results. However, you can make multiple changes to the config file to improve this model. One obvious change consists in improving the data augmentation strategy. The [`preprocessor.proto`](https://github.com/tensorflow/models/blob/master/research/object_detection/protos/preprocessor.proto) file contains the different data augmentation method available in the Tf Object Detection API. To help you visualize these augmentations, we are providing a notebook: `Explore augmentations.ipynb`. Using this notebook, try different data augmentation combinations and select the one you think is optimal for our dataset. Justify your choices in the writeup.
-
-Keep in mind that the following are also available:
-* experiment with the optimizer: type of optimizer, learning rate, scheduler etc
-* experiment with the architecture. The Tf Object Detection API [model zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md) offers many architectures. Keep in mind that the `pipeline.config` file is unique for each architecture and you will have to edit it.
-
-**Important:** If you are working on the workspace, your storage is limited. You may to delete the checkpoints files after each experiment. You should however keep the `tf.events` files located in the `train` and `eval` folder of your experiments. You can also keep the `saved_model` folder to create your videos.
-
 
 ### Creating an animation
 #### Export the trained model
@@ -138,23 +117,31 @@ Finally, you can create a video of your model's inferences for any tf record fil
 python inference_video.py --labelmap_path label_map.pbtxt --model_path experiments/reference/exported/saved_model --tf_record_path /data/waymo/testing/segment-12200383401366682847_2552_140_2572_140_with_camera_labels.tfrecord --config_path experiments/reference/pipeline_new.config --output_path animation.gif
 ```
 
-## Submission Template
 
-### Project overview
-This section should contain a brief description of the project and what we are trying to achieve. Why is object detection such an important component of self driving car systems?
+## Dataset
+### Dataset analysis
+| ![](images/EDA/image0.png)  |  ![](images/EDA/image1.png) |
+| ![](images/EDA/image2.png)  |  ![](images/EDA/image3.png) |
 
-### Set up
-This section should contain a brief description of the steps to follow to run the code for this repository.
+For the exploratory data analysis, I have shuffled and taken 10000 random images. The images are taken in varied conditions, weather and places. The class distribution is below: 
 
-### Dataset
-#### Dataset analysis
-This section should contain a quantitative and qualitative description of the dataset. It should include images, charts and other visualizations.
-#### Cross validation
-This section should detail the cross validation strategy and justify your approach.
+    <img src="images/EDA/class_dist.png" width=100% height=100%>
 
-### Training
-#### Reference experiment
-This section should detail the results of the reference experiment. It should includes training metrics and a detailed explanation of the algorithm's performances.
+As we can see, the dataset is quite imbalanced with very low count of cyclists. If we look further into the object distributions within images, we find the distribution for cyclists is very skewed where less than 900 images contain at least one cyclist. The distributions show that the dataset mostly contains vehicles and pedestrians in the images. Over 60k images contain at least 5 vehicles where maximum number of vehicles is 60+
 
-#### Improve on the reference
-This section should highlight the different strategies you adopted to improve your model. It should contain relevant figures and details of your findings.
+    <img src="images/EDA/vehicles_dist.png" width=100% height=100%>
+    <img src="images/EDA/pedestrian_dist.png" width=100% height=100%>
+    <img src="images/EDA/cyclist_dist.png" width=100% height=100%>
+
+
+## Training
+### Reference experiment
+
+    <img src="images/Experiments/reference_loss.png" width=80% height=80%>
+    
+The reference model, defined in [pipeline_new.config](https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/experiments/reference/pipeline_new.config) file, is trained for 2500 steps with a SGD with momentum optimizer. As we can see in the image above, the loss graphs are fluctuating a lot. The reason could be the small batch size of 2. The final evaluated total loss is 4.22 hence the model still needs modifications to improve the performance. The training loss and evaluation loss is quite close, therefore we can say there's no overfitting or underfitting present; the splitted dataset is the optimal splitting point for further experiments. 
+
+### Experiment 1 
+#### With augmentations 
+    <img src="images/Experiments/exp_1_loss.png" width=80% height=80%>
+
