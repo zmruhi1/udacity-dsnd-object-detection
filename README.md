@@ -154,13 +154,14 @@ To tackle the dark or foggy images and the ones taken in adverse weather, I have
 - random_adjust_brightness 
 ```
 RGB to grayscale: 
-![](images/Augmentations/augmentation_results_6.png)
+
+   <img src="images/Augmentations/augmentation_results_6.png">
 Contrast Adjustment:
-![](images/Augmentations/augmentation_results_5.png)
+   <img src="images/Augmentations/augmentation_results_5.png">
 Saturation Adjustment:
-![](images/Augmentations/augmentation_results_3.png)
+   <img src="images/Augmentations/augmentation_results_3.png">
 Brightness Adjustment:
-![](images/Augmentations/augmentation_results_1.png)
+   <img src="images/Augmentations/augmentation_results_1.png">
 
 In this experiment, I have also changed the batch-size to 8 to reduce fluctuations and train the model with more variations per batch. The changes can be found [here](https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/experiments/exp_1/pipeline_new.config). The results are as follows: 
 
