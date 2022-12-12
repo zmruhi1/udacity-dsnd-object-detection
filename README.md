@@ -120,19 +120,20 @@ python inference_video.py --labelmap_path label_map.pbtxt --model_path experimen
 
 ## Dataset
 ### Dataset analysis
-| | |
-| ![](images/EDA/image0.png)  |  ![](images/EDA/image1.png) |
-| ![](images/EDA/image2.png)  |  ![](images/EDA/image3.png) |
+![](images/EDA/image0.png)
+![](images/EDA/image1.png)
+![](images/EDA/image2.png)
+![](images/EDA/image3.png)
 
-For the exploratory data analysis, I have shuffled and taken 10000 random images. The images are taken in varied conditions, weather and places. The class distribution is below: 
+For the exploratory data analysis, I have shuffled and taken 10000 random images. The images are taken in varied timestamps, weather conditions and places. The class distribution is shown below: 
 
-   <img src="images/EDA/class_dist.png" width=100% height=100%>
+   <img src="images/EDA/class_dist.png" width=80% height=80%>
 
 As we can see, the dataset is quite imbalanced with very low count of cyclists. If we look further into the object distributions within images, we find the distribution for cyclists is very skewed where less than 900 images contain at least one cyclist. The distributions show that the dataset mostly contains vehicles and pedestrians in the images. Over 60k images contain at least 5 vehicles where maximum number of vehicles is 60+
 
-   <img src="images/EDA/vehicles_dist.png" width=100% height=100%>
-   <img src="images/EDA/pedestrian_dist.png" width=100% height=100%>
-   <img src="images/EDA/cyclist_dist.png" width=100% height=100%>
+   <img src="images/EDA/vehicles_dist.png" width=80% height=80%>
+   <img src="images/EDA/pedestrian_dist.png" width=80% height=80%>
+   <img src="images/EDA/cyclist_dist.png" width=80% height=80%>
 
 
 ## Training
@@ -144,5 +145,31 @@ The reference model, defined in [pipeline_new.config](https://github.com/zmruhi1
 
 ### Experiment 1 
 #### With augmentations 
-   <img src="images/Experiments/reference_loss.png" width=80% height=80%>
 
+To tackle the dark or foggy images and the ones taken in adverse weather, I have applied the following augmentation techniques: 
+```
+- random_rgb_to_gray: with a probability of 0.2
+- random_adjust_contrast with delta ranging from 0.5~1
+- random_adjust_saturation
+- random_adjust_brightness 
+```
+![RGB to grayscale](images/Augmentations/augmentation_results_6.png)
+![Contrast Adjustment](images/Augmentations/augmentation_results_5.png)
+![Saturation Adjustment](images/Augmentations/augmentation_results_3.png)
+![Brightness Adjustment](images/Augmentations/augmentation_results_1.png)
+
+In this experiment, I have also changed the batch-size to 8 to reduce fluctuations and train the model with more variations per batch. The changes can be found [here](https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/experiments/exp_1/pipeline_new.config). The results are as follows: 
+
+   <img src="images/Experiments/exp_1_loss.png" width=80% height=80%>
+
+The total loss of the model reduces down to 1.062 and the loss curves are also much smoother. The localization loss overfits with a slightly higher validation loss than training loss. However, the final loss shows little overfitting. If we look at the evaluated precision and recall scores, they are also higher than the reference model. 
+
+   <img src="images/Experiments/precision.png" width=80% height=80%>
+   <img src="images/Experiments/recall.png" width=80% height=80%>
+   
+### Experiment 2 
+#### With Adam optimizer 
+
+   <img src="images/Experiments/exp_2_loss.png" width=80% height=80%>
+
+Although the model starts with a higher loss, it seems to be smoothly converging. Due to GPU limitations, I had to stop the training process. Since this optimizier combines both momentum and RMSprop, I believe with proper tuning the model could improve further. The changes can be found [here](https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/experiments/exp_2/pipeline_new.config).
