@@ -99,7 +99,7 @@ python experiments/model_main_tf2.py --model_dir=experiments/reference/ --pipeli
 **Note**: Both processes will display some Tensorflow warnings, which can be ignored. You may have to kill the evaluation script manually using
 `CTRL+C`.
 
-To monitor the training, you can launch a tensorboard instance by running `python -m tensorboard.main --logdir experiments/reference/`. You will report your findings in the writeup.
+To monitor the training, you can launch a tensorboard instance by running `python -m tensorboard.main --logdir experiments/reference/`. 
 
 
 ### Creating an animation
@@ -138,10 +138,10 @@ As we can see, the dataset is quite imbalanced with very low count of cyclists. 
 
 ## Training
 ### Reference experiment
-
-   <img src="images/Experiments/reference_loss.png" width=80% height=80%>
     
-The reference model, defined in [pipeline_new.config](https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/experiments/reference/pipeline_new.config) file, is trained for 2500 steps with a SGD with momentum optimizer. As we can see in the image above, the loss graphs are fluctuating a lot. The reason could be the small batch size of 2. The final evaluated total loss is 4.22 hence the model still needs modifications to improve the performance. The training loss and evaluation loss is quite close, therefore we can say there's no overfitting or underfitting present; the splitted dataset is the optimal splitting point for further experiments. 
+The reference model, defined in [pipeline_new.config](https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/experiments/reference/pipeline_new.config) file, is trained for 2500 steps with a SGD with momentum optimizer. As we can see in the image below, the loss graphs are fluctuating a lot. The reason could be the small batch size of 2. The final evaluated total loss is 4.22 hence the model still needs modifications to improve the performance. The training loss and evaluation loss is quite close, therefore we can say there's no overfitting or underfitting present; the splitted dataset is the optimal splitting point for further experiments. 
+
+   <img src="images/Experiments/reference_loss.png" width=100% height=100%>
 
 ### Experiment 1 
 #### With augmentations 
@@ -153,23 +153,27 @@ To tackle the dark or foggy images and the ones taken in adverse weather, I have
 - random_adjust_saturation
 - random_adjust_brightness 
 ```
-![RGB to grayscale](images/Augmentations/augmentation_results_6.png)
-![Contrast Adjustment](images/Augmentations/augmentation_results_5.png)
-![Saturation Adjustment](images/Augmentations/augmentation_results_3.png)
-![Brightness Adjustment](images/Augmentations/augmentation_results_1.png)
+RGB to grayscale: 
+![](images/Augmentations/augmentation_results_6.png)
+Contrast Adjustment:
+![](images/Augmentations/augmentation_results_5.png)
+Saturation Adjustment:
+![](images/Augmentations/augmentation_results_3.png)
+Brightness Adjustment:
+![](images/Augmentations/augmentation_results_1.png)
 
 In this experiment, I have also changed the batch-size to 8 to reduce fluctuations and train the model with more variations per batch. The changes can be found [here](https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/experiments/exp_1/pipeline_new.config). The results are as follows: 
 
-   <img src="images/Experiments/exp_1_loss.png" width=80% height=80%>
+   <img src="images/Experiments/exp_1_loss.png" width=100% height=100%>
 
 The total loss of the model reduces down to 1.062 and the loss curves are also much smoother. The localization loss overfits with a slightly higher validation loss than training loss. However, the final loss shows little overfitting. If we look at the evaluated precision and recall scores, they are also higher than the reference model. 
 
-   <img src="images/Experiments/precision.png" width=80% height=80%>
-   <img src="images/Experiments/recall.png" width=80% height=80%>
+   <img src="images/Experiments/precision.png" width=100% height=100%>
+   <img src="images/Experiments/recall.png" width=100% height=100%>
    
 ### Experiment 2 
 #### With Adam optimizer 
 
-   <img src="images/Experiments/exp_2_loss.png" width=80% height=80%>
+   <img src="images/Experiments/exp_2_loss.png" width=100% height=100%>
 
 Although the model starts with a higher loss, it seems to be smoothly converging. Due to GPU limitations, I had to stop the training process. Since this optimizier combines both momentum and RMSprop, I believe with proper tuning the model could improve further. The changes can be found [here](https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/experiments/exp_2/pipeline_new.config).
