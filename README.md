@@ -129,9 +129,9 @@ For the exploratory data analysis, I have shuffled and taken 10000 random images
 
 As we can see, the dataset is quite imbalanced with very low count of cyclists. If we look further into the object distributions within images, we find the distribution for cyclists is very skewed where less than 900 images contain at least one cyclist. The distributions show that the dataset mostly contains vehicles and pedestrians in the images. Over 60k images contain at least 5 vehicles where maximum number of vehicles is 60+
 
-    <img src="images/EDA/vehicles_dist.png" width=100% height=100%>
-    <img src="images/EDA/pedestrian_dist.png" width=100% height=100%>
-    <img src="images/EDA/cyclist_dist.png" width=100% height=100%>
+    <img src="https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/images/EDA/vehicles_dist.png" width=100% height=100%>
+    <img src="https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/images/EDA/pedestrian_dist.png" width=100% height=100%>
+    <img src="https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/images/EDA/cyclist_dist.png" width=100% height=100%>
 
 
 ## Training
@@ -143,5 +143,5 @@ The reference model, defined in [pipeline_new.config](https://github.com/zmruhi1
 
 ### Experiment 1 
 #### With augmentations 
-    <img src="images/Experiments/exp_1_loss.png" width=80% height=80%>
+    <img src="https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/images/Experiments/exp_1_loss.png" width=80% height=80%>
 
