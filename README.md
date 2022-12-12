@@ -143,5 +143,5 @@ The reference model, defined in [pipeline_new.config](https://github.com/zmruhi1
 
 ### Experiment 1 
 #### With augmentations 
-    <img src="https://github.com/zmruhi1/udacity-dsnd-object-detection/tree/main/images/Experiments/exp_1_loss.png" width=80% height=80%>
+    ![](images/Experiments/exp_1_loss.png)
 
